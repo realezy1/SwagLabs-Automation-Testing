@@ -147,7 +147,6 @@ SwagLabs-Automation-Testing/
 └── README.md
 ```
 ---
-<img width="1911" height="1077" alt="image" src="https://github.com/user-attachments/assets/6babc43d-4a76-402e-b9ff-eff9375ec740" />
 
 ## Project Information
 
@@ -158,3 +157,11 @@ SwagLabs-Automation-Testing/
 - **Programming Language:** Java
 - **Test Framework:** TestNG
 - **Build Tool:** Maven
+
+## 8. Screenshots Test Result
+- LoginPageTest.Java
+<img width="1911" height="1077" alt="image" src="https://github.com/user-attachments/assets/d93a89c4-edfc-43fd-894d-92d79b68b9cf" />
+
+- HomePageTest.Java
+<img width="1917" height="1077" alt="Screenshot 2026-11-04 015720" src="https://github.com/user-attachments/assets/cc6e35e5-b2ff-46bf-acd6-f35a0dd273af" />
+
