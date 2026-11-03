@@ -147,6 +147,7 @@ SwagLabs-Automation-Testing/
 └── README.md
 ```
 ---
+<img width="1911" height="1077" alt="image" src="https://github.com/user-attachments/assets/6babc43d-4a76-402e-b9ff-eff9375ec740" />
 
 ## Project Information
 
