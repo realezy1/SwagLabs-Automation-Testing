@@ -308,9 +308,8 @@ public class HomePageTest {
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/inventory.html");
     }
 
-    @Test
+    @Test(priority = 9)
     public void shoppingMultipleProduct(){
-
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
         //add multiple products
@@ -424,6 +423,94 @@ public class HomePageTest {
 
         driver.findElement(By.id("back-to-products")).click();
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/inventory.html");
+    }
+
+
+    @Test(priority = 10)
+    public void logoutSuccessful() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        // Open hamburger menu
+        wait.until(ExpectedConditions.elementToBeClickable(
+                By.id("react-burger-menu-btn"))).click();
+
+        // Verify sidebar menu is displayed
+        WebElement sidebar = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.className("bm-menu")));
+
+        Assert.assertTrue(sidebar.isDisplayed(), "Sidebar menu is not displayed");
+
+        // Click logout
+        wait.until(ExpectedConditions.elementToBeClickable(
+                By.id("logout_sidebar_link"))).click();
+
+        // Verify redirected to login page
+        Assert.assertTrue(wait.until(ExpectedConditions.urlToBe(
+                "https://www.saucedemo.com/")), "Logout failed: URL is incorrect");
+
+        Assert.assertTrue(driver.findElement(By.id("login-button")).isDisplayed(),
+                "Login button is not displayed");
+    }
+
+    @Test(priority = 11)
+    public void verifyLoginPageAfterLogout() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        // Open hamburger menu
+        wait.until(ExpectedConditions.elementToBeClickable(
+                By.id("react-burger-menu-btn"))).click();
+
+        // Click logout
+        wait.until(ExpectedConditions.elementToBeClickable(
+                By.id("logout_sidebar_link"))).click();
+
+        // Verify login page
+        wait.until(ExpectedConditions.urlToBe("https://www.saucedemo.com/"));
+
+        Assert.assertTrue(driver.findElement(By.id("user-name")).isDisplayed(),
+                "Username field is not displayed");
+
+        Assert.assertTrue(driver.findElement(By.id("password")).isDisplayed(),
+                "Password field is not displayed");
+
+        Assert.assertTrue(driver.findElement(By.id("login-button")).isDisplayed(),
+                "Login button is not displayed");
+
+        Assert.assertTrue(driver.findElement(By.id("login-button")).isEnabled(),
+                "Login button is not enabled");
+    }
+
+    @Test(priority = 12)
+    public void verifyCannotAccessProductsAfterLogout() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        // Open hamburger menu
+        wait.until(ExpectedConditions.elementToBeClickable(
+                By.id("react-burger-menu-btn"))).click();
+
+        // Click logout
+        wait.until(ExpectedConditions.elementToBeClickable(
+                By.id("logout_sidebar_link"))).click();
+
+        // Verify logout
+        wait.until(ExpectedConditions.urlToBe("https://www.saucedemo.com/"));
+
+        // Click browser Back button
+        driver.navigate().back();
+
+        // Verify user remains on login page
+        Assert.assertTrue(wait.until(ExpectedConditions.urlToBe(
+                        "https://www.saucedemo.com/")),
+                "User can access Products page after logout");
+
+        // Refresh browser
+        driver.navigate().refresh();
+
+        // Verify login page after refresh
+        wait.until(ExpectedConditions.urlToBe("https://www.saucedemo.com/"));
+
+        Assert.assertTrue(driver.findElement(By.id("login-button")).isDisplayed(),
+                "Login page is not displayed after refresh");
     }
 
     @AfterMethod
