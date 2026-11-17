@@ -13,11 +13,21 @@ import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import SwagLabsSauceDemo.pages.LoginPage;
+import SwagLabsSauceDemo.pages.HomePage;
+import SwagLabsSauceDemo.pages.CartPage;
+import SwagLabsSauceDemo.pages.CheckoutPage;
 
 import java.time.Duration;
 
 public class HomePageTest {
     WebDriver driver;
+    WebDriverWait wait;
+
+    LoginPage loginPage;
+    HomePage homePage;
+    CartPage cartPage;
+    CheckoutPage checkoutPage;
 
     @BeforeMethod
     private void init(){
@@ -41,476 +51,429 @@ public class HomePageTest {
         driver.findElement(By.id("login-button")).click();
 
         //verify successful login
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         Assert.assertTrue(wait.until(ExpectedConditions.urlToBe("https://www.saucedemo.com/inventory.html")), "Login failed");
+        homePage = new HomePage(driver, wait);
+        cartPage = new CartPage(driver, wait);
+        checkoutPage = new CheckoutPage(driver, wait);
+        loginPage = new LoginPage(driver, wait);
     }
 
     @Test(priority = 0)
     public void checkElement() {
         //check element header app logo
-        Assert.assertEquals(driver.findElement(By.className("app_logo")).getText(), "Swag Labs");
+        Assert.assertEquals(homePage.getAppLogoText(), "Swag Labs");
 
         //check element title
-        Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='title']")).getText(), "Products");
+        Assert.assertEquals(homePage.getPageTitle(), "Products");
 
         //check element product 1
-        Assert.assertTrue(driver.findElement(By.id("item_4_img_link")).isDisplayed(), "Gambar tidak berhasil ditampilkan");
-        Assert.assertEquals(driver.findElement(By.id("item_4_title_link")).getText(), "Sauce Labs Backpack");
-        driver.findElement(By.id("add-to-cart-sauce-labs-backpack")).click();
-        driver.findElement(By.id("remove-sauce-labs-backpack")).click();
+        Assert.assertTrue(homePage.isProductImageDisplayed("item_4"), "Gambar tidak berhasil ditampilkan");
+        Assert.assertEquals(homePage.getProductName("item_4"), "Sauce Labs Backpack");
+        homePage.addProductToCart("sauce-labs-backpack");
+        homePage.removeProductFromCart("sauce-labs-backpack");
 
         //check element product 2
-        Assert.assertTrue(driver.findElement(By.id("item_0_img_link")).isDisplayed(), "Gambar tidak berhasil ditampilkan");
-        Assert.assertEquals(driver.findElement(By.id("item_0_title_link")).getText(), "Sauce Labs Bike Light");
-        driver.findElement(By.id("add-to-cart-sauce-labs-bike-light")).click();
-        driver.findElement(By.id("remove-sauce-labs-bike-light")).click();
+        Assert.assertTrue(homePage.isProductImageDisplayed("item_0"), "Gambar tidak berhasil ditampilkan");
+        Assert.assertEquals(homePage.getProductName("item_0"), "Sauce Labs Bike Light");
+        homePage.addProductToCart("sauce-labs-bike-light");
+        homePage.removeProductFromCart("sauce-labs-bike-light");
 
         //check element product 3
-        Assert.assertTrue(driver.findElement(By.id("item_1_img_link")).isDisplayed(), "Gambar tidak berhasil ditampilkan");
-        Assert.assertEquals(driver.findElement(By.id("item_1_title_link")).getText(), "Sauce Labs Bolt T-Shirt");
-        driver.findElement(By.id("add-to-cart-sauce-labs-bolt-t-shirt")).click();
-        driver.findElement(By.id("remove-sauce-labs-bolt-t-shirt")).click();
+        Assert.assertTrue(homePage.isProductImageDisplayed("item_1"), "Gambar tidak berhasil ditampilkan");
+        Assert.assertEquals(homePage.getProductName("item_1"), "Sauce Labs Bolt T-Shirt");
+        homePage.addProductToCart("sauce-labs-bolt-t-shirt");
+        homePage.removeProductFromCart("sauce-labs-bolt-t-shirt");
 
         //check element product 4
-        Assert.assertTrue(driver.findElement(By.id("item_5_img_link")).isDisplayed(), "Gambar tidak berhasil ditampilkan");
-        Assert.assertEquals(driver.findElement(By.id("item_5_title_link")).getText(), "Sauce Labs Fleece Jacket");
-        driver.findElement(By.id("add-to-cart-sauce-labs-fleece-jacket")).click();
-        driver.findElement(By.id("remove-sauce-labs-fleece-jacket")).click();
+        Assert.assertTrue(homePage.isProductImageDisplayed("item_5"), "Gambar tidak berhasil ditampilkan");
+        Assert.assertEquals(homePage.getProductName("item_5"), "Sauce Labs Fleece Jacket");
+        homePage.addProductToCart("sauce-labs-fleece-jacket");
+        homePage.removeProductFromCart("sauce-labs-fleece-jacket");
 
         //check element product 5
-        Assert.assertTrue(driver.findElement(By.id("item_2_img_link")).isDisplayed(), "Gambar tidak berhasil ditampilkan");
-        Assert.assertEquals(driver.findElement(By.id("item_2_title_link")).getText(), "Sauce Labs Onesie");
-        driver.findElement(By.id("add-to-cart-sauce-labs-onesie")).click();
-        driver.findElement(By.id("remove-sauce-labs-onesie")).click();
+        Assert.assertTrue(homePage.isProductImageDisplayed("item_2"), "Gambar tidak berhasil ditampilkan");
+        Assert.assertEquals(homePage.getProductName("item_2"), "Sauce Labs Onesie");
+        homePage.addProductToCart("sauce-labs-onesie");
+        homePage.removeProductFromCart("sauce-labs-onesie");
 
         //check element product 6
-        Assert.assertTrue(driver.findElement(By.id("item_3_img_link")).isDisplayed(), "Gambar tidak berhasil ditampilkan");
-        Assert.assertEquals(driver.findElement(By.id("item_3_title_link")).getText(), "Test.allTheThings() T-Shirt (Red)");
-        driver.findElement(By.id("add-to-cart-test.allthethings()-t-shirt-(red)")).click();
-        driver.findElement(By.id("remove-test.allthethings()-t-shirt-(red)")).click();
+        Assert.assertTrue(homePage.isProductImageDisplayed("item_3"), "Gambar tidak berhasil ditampilkan");
+        Assert.assertEquals(homePage.getProductName("item_3"), "Test.allTheThings() T-Shirt (Red)");
+        homePage.addProductToCart("test.allthethings()-t-shirt-(red)");
+        homePage.removeProductFromCart("test.allthethings()-t-shirt-(red)");
 
         //check element all of products item desc
-        Assert.assertEquals(driver.findElements(By.className("inventory_item_desc")).get(0).getText(),
+        Assert.assertEquals(homePage.getProductDescription(0),
                 "carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.");
-        Assert.assertEquals(driver.findElements(By.className("inventory_item_desc")).get(1).getText(),
+        Assert.assertEquals(homePage.getProductDescription(1),
                 "A red light isn't the desired state in testing but it sure helps when riding your bike at night. Water-resistant with 3 lighting modes, 1 AAA battery included.");
-        Assert.assertEquals(driver.findElements(By.className("inventory_item_desc")).get(2).getText(),
+        Assert.assertEquals(homePage.getProductDescription(2),
                 "Get your testing superhero on with the Sauce Labs bolt T-shirt. From American Apparel, 100% ringspun combed cotton, heather gray with red bolt.");
-        Assert.assertEquals(driver.findElements(By.className("inventory_item_desc")).get(3).getText(),
+        Assert.assertEquals(homePage.getProductDescription(3),
                 "It's not every day that you come across a midweight quarter-zip fleece jacket capable of handling everything from a relaxing day outdoors to a busy day at the office.");
-        Assert.assertEquals(driver.findElements(By.className("inventory_item_desc")).get(4).getText(),
+        Assert.assertEquals(homePage.getProductDescription(4),
                 "Rib snap infant onesie for the junior automation engineer in development. Reinforced 3-snap bottom closure, two-needle hemmed sleeved and bottom won't unravel.");
-        Assert.assertEquals(driver.findElements(By.className("inventory_item_desc")).get(5).getText(),
+        Assert.assertEquals(homePage.getProductDescription(5),
                 "This classic Sauce Labs t-shirt is perfect to wear when cozying up to your keyboard to automate a few tests. Super-soft and comfy ringspun combed cotton.");
 
         //check element all of products price
-        Assert.assertEquals(driver.findElements(By.className("inventory_item_price")).get(0).getText(), "$29.99");
-        Assert.assertEquals(driver.findElements(By.className("inventory_item_price")).get(1).getText(), "$9.99");
-        Assert.assertEquals(driver.findElements(By.className("inventory_item_price")).get(2).getText(), "$15.99");
-        Assert.assertEquals(driver.findElements(By.className("inventory_item_price")).get(3).getText(), "$49.99");
-        Assert.assertEquals(driver.findElements(By.className("inventory_item_price")).get(4).getText(), "$7.99");
-        Assert.assertEquals(driver.findElements(By.className("inventory_item_price")).get(5).getText(), "$15.99");
+        Assert.assertEquals(homePage.getProductPrice(0), "$29.99");
+        Assert.assertEquals(homePage.getProductPrice(1), "$9.99");
+        Assert.assertEquals(homePage.getProductPrice(2), "$15.99");
+        Assert.assertEquals(homePage.getProductPrice(3), "$49.99");
+        Assert.assertEquals(homePage.getProductPrice(4), "$7.99");
+        Assert.assertEquals(homePage.getProductPrice(5), "$15.99");
     }
 
     @Test(priority = 1)
     public void openSideBar1() {
-        //open and check lazy load on the sidebar
-        driver.findElement(By.id("react-burger-menu-btn")).click();
+        // Open sidebar
+        homePage.openSideBar();
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        // Open Dynamic Catalog
+        homePage.clickDynamicCatalog();
 
-        WebElement catalogLink = wait.until(ExpectedConditions.elementToBeClickable(By.id("dynamic_catalog_sidebar_link")));
-        catalogLink.click();
+        // Open Lazy Load
+        homePage.clickLazyLoad();
 
-        WebElement lazyloadLink = wait.until(ExpectedConditions.elementToBeClickable(By.id("dynamic_catalog_lazy_load_link")));
-        lazyloadLink.click();
+        // Verify destination URL
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/dynamic-catalog-lazy-load.html");
     }
 
     @Test(priority = 2)
     public void openSideBar2() {
-        //open and check spinner on the sidebar
-        driver.findElement(By.id("react-burger-menu-btn")).click();
+        // Open sidebar
+        homePage.openSideBar();
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        // Open Dynamic Catalog
+        homePage.clickDynamicCatalog();
 
-        WebElement catalogLink = wait.until(ExpectedConditions.elementToBeClickable(By.id("dynamic_catalog_sidebar_link")));
-        catalogLink.click();
+        // Open Spinner
+        homePage.clickSpinner();
 
-        WebElement spinnerLink = wait.until(ExpectedConditions.elementToBeClickable(By.id("dynamic_catalog_spinner_link")));
-        spinnerLink.click();
+        // Verify destination URL
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/dynamic-catalog-spinner.html");
     }
 
     @Test(priority = 3)
     public void openSideBar3() {
-        //open and check lazy load on the sidebar
-        driver.findElement(By.id("react-burger-menu-btn")).click();
+        // Open sidebar
+        homePage.openSideBar();
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        // Open Dynamic Catalog
+        homePage.clickDynamicCatalog();
 
-        WebElement catalogLink = wait.until(ExpectedConditions.elementToBeClickable(By.id("dynamic_catalog_sidebar_link")));
-        catalogLink.click();
+        // Open Slider
+        homePage.clickSlider();
 
-        WebElement sliderLink = wait.until(ExpectedConditions.elementToBeClickable(By.id("dynamic_catalog_slider_link")));
-        sliderLink.click();
+        // Verify destination URL
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/dynamic-catalog-slider.html");
     }
 
     @Test(priority = 4)
     public void dropdownTest1(){
         //check dropdown displayed and activated
-        WebElement checkDropdown = driver.findElement(By.cssSelector("[data-test='product-sort-container']"));
-        Assert.assertTrue(checkDropdown.isDisplayed(),"Dropdown is not displayed");
-        Assert.assertTrue(checkDropdown.isEnabled(), "Dropdown is not activated");
+        Assert.assertTrue(homePage.isProductSortDisplayed());
+        Assert.assertTrue(homePage.isProductSortEnabled());
 
         //check dropdown option
-        Select sort = new Select(checkDropdown);
-        Assert.assertEquals(sort.getOptions().size(),4, "Options dropdown is not correct");
-        Assert.assertEquals(sort.getFirstSelectedOption().getText(), "Name (A to Z)", "default option is false");
+        Assert.assertEquals(homePage.getProductSortOptionsCount(), 4);
+        Assert.assertEquals(homePage.getSelectedProductSortText(), "Name (A to Z)");
     }
 
     @Test(priority = 5)
     public void dropdownTest2() {
-        By dropdownLocator = By.cssSelector("[data-test='product-sort-container']");
-        WebElement dropdown = driver.findElement(dropdownLocator);
-
-        // Select option
-        new Select(dropdown).selectByValue("za");
-
-        // Find dropdown again
-        WebElement updatedDropdown = driver.findElement(dropdownLocator);
+        // Select Name (Z to A)
+        homePage.selectProductSort("za");
 
         // Verify selected option
-        String actualOption = new Select(updatedDropdown).getFirstSelectedOption().getText();
-        Assert.assertEquals(actualOption, "Name (Z to A)", "Selected option is incorrect");
-    }
-
-    @Test(priority = 5)
-    public void dropdownTest3() {
-        By dropdownLocator = By.cssSelector("[data-test='product-sort-container']");
-        WebElement dropdown = driver.findElement(dropdownLocator);
-
-        // Select option
-        new Select(dropdown).selectByValue("lohi");
-
-        // Find dropdown again
-        WebElement updatedDropdown = driver.findElement(dropdownLocator);
-
-        // Verify selected option
-        String actualOption = new Select(updatedDropdown).getFirstSelectedOption().getText();
-        Assert.assertEquals(actualOption, "Price (low to high)", "Selected option is incorrect");
+        Assert.assertEquals(homePage.getSelectedProductSortText(), "Name (Z to A)");
     }
 
     @Test(priority = 6)
-    public void dropdownTest4() {
-        By dropdownLocator = By.cssSelector("[data-test='product-sort-container']");
-        WebElement dropdown = driver.findElement(dropdownLocator);
-
-        // Select option
-        new Select(dropdown).selectByValue("hilo");
-
-        // Find dropdown again
-        WebElement updatedDropdown = driver.findElement(dropdownLocator);
+    public void dropdownTest3() {
+        // Select Price (low to high)
+        homePage.selectProductSort("lohi");
 
         // Verify selected option
-        String actualOption = new Select(updatedDropdown).getFirstSelectedOption().getText();
-        Assert.assertEquals(actualOption, "Price (high to low)", "Selected option is incorrect");
+        Assert.assertEquals(homePage.getSelectedProductSortText(), "Price (low to high)");
     }
 
     @Test(priority = 7)
-    public void fakeShopping() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        //add to cart then remove
-        By addToCart = By.id("add-to-cart-sauce-labs-backpack");
+    public void dropdownTest4() {
+        // Select Price (high to low)
+        homePage.selectProductSort("hilo");
 
-        WebElement addButton = wait.until(ExpectedConditions.elementToBeClickable(addToCart));
-
-        // Add product to cart
-        addButton.click();
-
-        // Verify cart badge
-        Assert.assertEquals(driver.findElement(By.className("shopping_cart_badge")).getText(), "1", "Cart quantity is incorrect");
-        driver.findElement(By.cssSelector("[data-test='shopping-cart-link']")).click();
-        // Verify cart page URL
-        Assert.assertTrue(wait.until(ExpectedConditions.urlToBe("https://www.saucedemo.com/cart.html")), "User did not navigate to cart page");
-        // Remove product from cart
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("remove-sauce-labs-backpack"))).click();
+        // Verify selected option
+        Assert.assertEquals(homePage.getSelectedProductSortText(), "Price (high to low)");
     }
 
     @Test(priority = 8)
-    public void shoppingOneProduct(){
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    public void fakeShopping() {
 
-        //add to cart
-        By addToCart = By.id("add-to-cart-sauce-labs-backpack");
-        WebElement addButton = wait.until(ExpectedConditions.elementToBeClickable(addToCart));
-        addButton.click();
+        // Add product to cart
+        homePage.addProductToCart("sauce-labs-backpack");
 
-        //verify cart badge if only one product in the cart
-        driver.findElement(By.cssSelector("[data-test='shopping-cart-link']")).click();
+        // Verify cart badge
+        Assert.assertTrue(homePage.isShoppingCartBadgeDisplayed());
+        Assert.assertEquals(homePage.getShoppingCartBadge(), "1");
 
-        //verify product
-        Assert.assertEquals(driver.findElement(By.id("item_4_title_link")).getText(),"Sauce Labs Backpack");
-        Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='inventory-item-desc']")).getText(), "carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.");
+        // Open shopping cart
+        homePage.clickShoppingCart();
 
-        //checkout
-        driver.findElement(By.id("checkout")).click();
-        Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/checkout-step-one.html");
+        // Verify cart page URL
+        Assert.assertTrue(wait.until(ExpectedConditions.urlToBe("https://www.saucedemo.com/cart.html")), "User did not navigate to cart page");
 
-        //fill the form
-        driver.findElement(By.id("first-name")).sendKeys("Aksal");
-        driver.findElement(By.id("last-name")).sendKeys("Pratama");
-        driver.findElement(By.id("postal-code")).sendKeys("123");
-        driver.findElement(By.id("continue")).click();
-        Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/checkout-step-two.html");
+        // Verify cart title
+        Assert.assertEquals(cartPage.getCartTitle(), "Your Cart");
 
-        //verify overview checkout title
-        Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='title']")).getText(), "Checkout: Overview");
-        //verify overview checkout product, desc & price
-        Assert.assertEquals(driver.findElement(By.id("item_4_title_link")).getText(), "Sauce Labs Backpack");
-        Assert.assertEquals(driver.findElements(By.className("inventory_item_desc")).get(0).getText(),
-                "carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.");
-        Assert.assertEquals(driver.findElements(By.className("inventory_item_price")).get(0).getText(), "$29.99");
-        //payment info & value label
-        Assert.assertTrue(driver.findElement(By.cssSelector("[data-test='payment-info-label']")).isDisplayed(), "Payment Info Label is not show");
-        Assert.assertTrue(driver.findElement(By.cssSelector("[data-test='payment-info-value']")).isDisplayed(), "Payment Value Label is not show");
-        //shipping info label
-        Assert.assertTrue(driver.findElement(By.cssSelector("[data-test='shipping-info-label']")).isDisplayed(), "Shipping Info Label is not show");
-        Assert.assertTrue(driver.findElement(By.cssSelector("[data-test='shipping-info-value']")).isDisplayed(), "Shipping Value Label is not show");
-        //subtotal info
-        Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='subtotal-label']")).getText(), "Item total: $29.99");
-        //tax info
-        Assert.assertTrue(driver.findElement(By.cssSelector("[data-test='tax-label']")).getText().startsWith("Tax: $"));
-        //total info
-        Assert.assertTrue(driver.findElement(By.cssSelector("[data-test='total-label']")).getText().startsWith("Total: $"));
-        //finish button
-        Assert.assertTrue(driver.findElement(By.id("finish")).isDisplayed());
-        Assert.assertTrue(driver.findElement(By.id("finish")).isEnabled());
-        driver.findElement(By.id("finish")).click();
-        Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/checkout-complete.html");
-
-        //verify checkout complete title
-        Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='title']")).getText(), "Checkout: Complete!");
-        //verify img
-        WebElement ponyExpress = driver.findElement(By.cssSelector("[data-test='pony-express']"));
-        Assert.assertTrue(ponyExpress.isDisplayed(), "Pony Express image is not displayed");
-        //verify h2
-        Assert.assertEquals(driver.findElement(By.className("complete-header")).getText(), "Thank you for your order!");
-        //complete text
-        Assert.assertEquals(driver.findElement(By.className("complete-text")).getText(), "Your order has been dispatched, and will arrive just as fast as the pony can get there!");
-        //complete button
-        Assert.assertTrue(driver.findElement(By.id("back-to-products")).isDisplayed());
-        Assert.assertTrue(driver.findElement(By.id("back-to-products")).isEnabled());
-        Assert.assertTrue(driver.findElement(By.id("generate-pdf-order")).isDisplayed());
-        Assert.assertTrue(driver.findElement(By.id("generate-pdf-order")).isEnabled());
-        driver.findElement(By.id("back-to-products")).click();
-        Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/inventory.html");
+        // Remove product from cart
+        cartPage.removeCartItem();
     }
+
 
     @Test(priority = 9)
-    public void shoppingMultipleProduct(){
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    public void shoppingOneProduct() {
+        // Add product to cart
+        homePage.addProductToCart("sauce-labs-backpack");
 
-        //add multiple products
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("add-to-cart-sauce-labs-backpack"))).click();
-        driver.findElement(By.id("add-to-cart-sauce-labs-bike-light")).click();
-        driver.findElement(By.id("add-to-cart-sauce-labs-bolt-t-shirt")).click();
+        // Open shopping cart
+        homePage.clickShoppingCart();
 
-        //verify cart badge
-        Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='shopping-cart-badge']")).getText(), "3");
+        // Verify cart product
+        Assert.assertEquals(cartPage.getCartTitle(), "Your Cart");
+        Assert.assertEquals(cartPage.getCartItemName(0), "Sauce Labs Backpack");
+        Assert.assertEquals(cartPage.getCartItemDescription(0), "carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.");
+        Assert.assertEquals(cartPage.getCartItemPrice(0), "$29.99");
 
-        //open cart
-        driver.findElement(By.cssSelector("[data-test='shopping-cart-link']")).click();
-
-        //verify cart quantity
-        Assert.assertEquals(driver.findElements(By.className("cart_item")).size(), 3);
-
-        //verify all products
-        Assert.assertEquals(driver.findElement(By.id("item_4_title_link")).getText(), "Sauce Labs Backpack");
-        Assert.assertEquals(driver.findElement(By.id("item_0_title_link")).getText(), "Sauce Labs Bike Light");
-        Assert.assertEquals(driver.findElement(By.id("item_1_title_link")).getText(), "Sauce Labs Bolt T-Shirt");
-
-        //verify initial subtotal
-        Assert.assertEquals(driver.findElements(By.className("inventory_item_price")).get(0).getText(), "$29.99");
-        Assert.assertEquals(driver.findElements(By.className("inventory_item_price")).get(1).getText(), "$9.99");
-        Assert.assertEquals(driver.findElements(By.className("inventory_item_price")).get(2).getText(), "$15.99");
-
-        //remove one product
-        driver.findElement(By.id("remove-sauce-labs-bike-light")).click();
-
-        //verify cart quantity after remove
-        Assert.assertEquals(driver.findElements(By.className("cart_item")).size(), 2);
-        Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='shopping-cart-badge']")).getText(), "2");
-
-        //verify remaining products
-        Assert.assertEquals(driver.findElement(By.id("item_4_title_link")).getText(), "Sauce Labs Backpack");
-        Assert.assertEquals(driver.findElement(By.id("item_1_title_link")).getText(), "Sauce Labs Bolt T-Shirt");
-
-        //verify removed product
-        Assert.assertEquals(driver.findElements(By.id("item_0_title_link")).size(), 0);
-
-        //verify subtotal after remove
-        Assert.assertEquals(driver.findElements(By.className("inventory_item_price")).get(0).getText(), "$29.99");
-        Assert.assertEquals(driver.findElements(By.className("inventory_item_price")).get(1).getText(), "$15.99");
-
-        //checkout
-        driver.findElement(By.id("checkout")).click();
+        // Checkout
+        cartPage.clickCheckout();
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/checkout-step-one.html");
 
-        //fill the form
-        driver.findElement(By.id("first-name")).sendKeys("Aksal");
-        driver.findElement(By.id("last-name")).sendKeys("Pratama");
-        driver.findElement(By.id("postal-code")).sendKeys("123");
-        driver.findElement(By.id("continue")).click();
+        // Fill the form
+        checkoutPage.enterFirstName("Aksal");
+        checkoutPage.enterLastName("Pratama");
+        checkoutPage.enterPostalCode("123");
+        checkoutPage.clickContinue();
 
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/checkout-step-two.html");
 
-        //verify overview checkout title
-        Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='title']")).getText(), "Checkout: Overview");
+        // Verify overview checkout title
+        Assert.assertEquals(checkoutPage.getCheckoutTitle(), "Checkout: Overview");
 
-        //verify overview checkout product
-        Assert.assertEquals(driver.findElements(By.className("cart_item")).size(), 2);
-        Assert.assertEquals(driver.findElement(By.id("item_4_title_link")).getText(), "Sauce Labs Backpack");
-        Assert.assertEquals(driver.findElement(By.id("item_1_title_link")).getText(), "Sauce Labs Bolt T-Shirt");
+        // Verify overview product, description & price
+        Assert.assertEquals(checkoutPage.getCheckoutItemName(0), "Sauce Labs Backpack");
+        Assert.assertEquals(checkoutPage.getCheckoutItemDescription(0), "carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.");
+        Assert.assertEquals(checkoutPage.getCheckoutItemPrice(0), "$29.99");
 
-        //verify product price
-        Assert.assertEquals(driver.findElements(By.className("inventory_item_price")).get(0).getText(), "$29.99");
-        Assert.assertEquals(driver.findElements(By.className("inventory_item_price")).get(1).getText(), "$15.99");
+        // Payment information
+        Assert.assertTrue(checkoutPage.isPaymentInfoLabelDisplayed());
+        Assert.assertTrue(checkoutPage.isPaymentInfoValueDisplayed());
 
-        //payment info & value label
-        Assert.assertTrue(driver.findElement(By.cssSelector("[data-test='payment-info-label']")).isDisplayed());
-        Assert.assertTrue(driver.findElement(By.cssSelector("[data-test='payment-info-value']")).isDisplayed());
+        // Shipping information
+        Assert.assertTrue(checkoutPage.isShippingInfoLabelDisplayed());
+        Assert.assertTrue(checkoutPage.isShippingInfoValueDisplayed());
 
-        //shipping info & value label
-        Assert.assertTrue(driver.findElement(By.cssSelector("[data-test='shipping-info-label']")).isDisplayed());
-        Assert.assertTrue(driver.findElement(By.cssSelector("[data-test='shipping-info-value']")).isDisplayed());
+        // Subtotal, tax & total
+        Assert.assertEquals(checkoutPage.getSubtotalLabel(), "Item total: $29.99");
+        Assert.assertTrue(checkoutPage.getTaxLabel().startsWith("Tax: $"));
+        Assert.assertTrue(checkoutPage.getTotalLabel().startsWith("Total: $"));
 
-        //subtotal info
-        Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='subtotal-label']")).getText(), "Item total: $45.98");
 
-        //tax info
-        Assert.assertTrue(driver.findElement(By.cssSelector("[data-test='tax-label']")).getText().startsWith("Tax: $"));
-
-        //total info
-        Assert.assertTrue(driver.findElement(By.cssSelector("[data-test='total-label']")).getText().startsWith("Total: $"));
-
-        //finish button
-        Assert.assertTrue(driver.findElement(By.id("finish")).isDisplayed());
-        Assert.assertTrue(driver.findElement(By.id("finish")).isEnabled());
-        driver.findElement(By.id("finish")).click();
-
+        // Finish button
+        checkoutPage.clickFinish();
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/checkout-complete.html");
 
-        //verify checkout complete title
-        Assert.assertEquals(driver.findElement(By.cssSelector("[data-test='title']")).getText(), "Checkout: Complete!");
+        // Verify checkout complete title
+        Assert.assertEquals(checkoutPage.getCheckoutTitle(), "Checkout: Complete!");
 
-        //verify img
-        WebElement ponyExpress = driver.findElement(By.cssSelector("[data-test='pony-express']"));
-        Assert.assertTrue(ponyExpress.isDisplayed(), "Pony Express image is not displayed");
+        // Verify Pony Express image
+        Assert.assertTrue(checkoutPage.isPonyExpressDisplayed(), "Pony Express image is not displayed");
 
-        //verify h2
-        Assert.assertEquals(driver.findElement(By.className("complete-header")).getText(), "Thank you for your order!");
+        // Verify completion message
+        Assert.assertEquals(checkoutPage.getCompleteHeader(), "Thank you for your order!");
+        Assert.assertEquals(checkoutPage.getCompleteText(), "Your order has been dispatched, and will arrive just as fast as the pony can get there!");
 
-        //complete text
-        Assert.assertEquals(driver.findElement(By.className("complete-text")).getText(), "Your order has been dispatched, and will arrive just as fast as the pony can get there!");
+        // Verify buttons
+        Assert.assertTrue(checkoutPage.isBackToProductsDisplayed());
+        Assert.assertTrue(checkoutPage.isBackToProductsEnabled());
+        Assert.assertTrue(checkoutPage.isGeneratePdfOrderDisplayed());
+        Assert.assertTrue(checkoutPage.isGeneratePdfOrderEnabled());
+        checkoutPage.clickBackToProducts();
 
-        //complete button
-        Assert.assertTrue(driver.findElement(By.id("back-to-products")).isDisplayed());
-        Assert.assertTrue(driver.findElement(By.id("back-to-products")).isEnabled());
-        Assert.assertTrue(driver.findElement(By.id("generate-pdf-order")).isDisplayed());
-        Assert.assertTrue(driver.findElement(By.id("generate-pdf-order")).isEnabled());
-
-        driver.findElement(By.id("back-to-products")).click();
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/inventory.html");
     }
 
-
     @Test(priority = 10)
-    public void logoutSuccessful() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    public void shoppingMultipleProduct() {
+        // Add multiple products to cart
+        homePage.addProductToCart("sauce-labs-backpack");
+        homePage.addProductToCart("sauce-labs-bike-light");
+        homePage.addProductToCart("sauce-labs-bolt-t-shirt");
 
-        // Open hamburger menu
-        wait.until(ExpectedConditions.elementToBeClickable(
-                By.id("react-burger-menu-btn"))).click();
+        // Verify cart badge
+        Assert.assertTrue(homePage.isShoppingCartBadgeDisplayed());
+        Assert.assertEquals(homePage.getShoppingCartBadge(), "3");
 
-        // Verify sidebar menu is displayed
-        WebElement sidebar = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.className("bm-menu")));
+        // Open shopping cart
+        homePage.clickShoppingCart();
 
-        Assert.assertTrue(sidebar.isDisplayed(), "Sidebar menu is not displayed");
+        // Verify cart quantity
+        Assert.assertEquals(cartPage.getCartItemCount(), 3);
 
-        // Click logout
-        wait.until(ExpectedConditions.elementToBeClickable(
-                By.id("logout_sidebar_link"))).click();
+        // Verify all products
+        Assert.assertEquals(cartPage.getCartItemName(0), "Sauce Labs Backpack");
+        Assert.assertEquals(cartPage.getCartItemName(1), "Sauce Labs Bike Light");
+        Assert.assertEquals(cartPage.getCartItemName(2), "Sauce Labs Bolt T-Shirt");
 
-        // Verify redirected to login page
-        Assert.assertTrue(wait.until(ExpectedConditions.urlToBe(
-                "https://www.saucedemo.com/")), "Logout failed: URL is incorrect");
+        // Verify initial product prices
+        Assert.assertEquals(cartPage.getCartItemPrice(0), "$29.99");
+        Assert.assertEquals(cartPage.getCartItemPrice(1), "$9.99");
+        Assert.assertEquals(cartPage.getCartItemPrice(2), "$15.99");
 
-        Assert.assertTrue(driver.findElement(By.id("login-button")).isDisplayed(),
-                "Login button is not displayed");
+        // Remove Sauce Labs Bike Light
+        cartPage.removeCartItem("sauce-labs-bike-light");
+
+        // Verify cart quantity after removal
+        Assert.assertEquals(cartPage.getCartItemCount(), 2);
+        Assert.assertEquals(homePage.getShoppingCartBadge(), "2");
+
+        // Verify remaining products
+        Assert.assertEquals(cartPage.getCartItemName(0), "Sauce Labs Backpack");
+        Assert.assertEquals(cartPage.getCartItemName(1), "Sauce Labs Bolt T-Shirt");
+
+        // Verify remaining product prices
+        Assert.assertEquals(cartPage.getCartItemPrice(0), "$29.99");
+        Assert.assertEquals(cartPage.getCartItemPrice(1), "$15.99");
+
+        // Checkout
+        cartPage.clickCheckout();
+        Assert.assertEquals(driver.getCurrentUrl(),
+                "https://www.saucedemo.com/checkout-step-one.html");
+
+        // Fill checkout information
+        checkoutPage.enterFirstName("Aksal");
+        checkoutPage.enterLastName("Pratama");
+        checkoutPage.enterPostalCode("123");
+        checkoutPage.clickContinue();
+
+        Assert.assertEquals(driver.getCurrentUrl(),
+                "https://www.saucedemo.com/checkout-step-two.html");
+
+        // Verify checkout overview
+        Assert.assertEquals(checkoutPage.getCheckoutTitle(), "Checkout: Overview");
+        Assert.assertEquals(checkoutPage.getCheckoutItemName(0), "Sauce Labs Backpack");
+        Assert.assertEquals(checkoutPage.getCheckoutItemName(1), "Sauce Labs Bolt T-Shirt");
+
+        // Verify product prices
+        Assert.assertEquals(checkoutPage.getCheckoutItemPrice(0), "$29.99");
+        Assert.assertEquals(checkoutPage.getCheckoutItemPrice(1), "$15.99");
+
+        // Payment information
+        Assert.assertTrue(checkoutPage.isPaymentInfoLabelDisplayed());
+        Assert.assertTrue(checkoutPage.isPaymentInfoValueDisplayed());
+
+        // Shipping information
+        Assert.assertTrue(checkoutPage.isShippingInfoLabelDisplayed());
+        Assert.assertTrue(checkoutPage.isShippingInfoValueDisplayed());
+
+        // Subtotal, tax, and total
+        Assert.assertEquals(checkoutPage.getSubtotalLabel(), "Item total: $45.98");
+        Assert.assertTrue(checkoutPage.getTaxLabel().startsWith("Tax: $"));
+        Assert.assertTrue(checkoutPage.getTotalLabel().startsWith("Total: $"));
+
+        // Finish checkout
+        checkoutPage.clickFinish();
+
+        Assert.assertEquals(driver.getCurrentUrl(),
+                "https://www.saucedemo.com/checkout-complete.html");
+
+        // Verify checkout completion
+        Assert.assertEquals(checkoutPage.getCheckoutTitle(), "Checkout: Complete!");
+        Assert.assertTrue(checkoutPage.isPonyExpressDisplayed());
+        Assert.assertEquals(checkoutPage.getCompleteHeader(), "Thank you for your order!");
+        Assert.assertEquals(checkoutPage.getCompleteText(),
+                "Your order has been dispatched, and will arrive just as fast as the pony can get there!");
+
+        // Verify buttons
+        Assert.assertTrue(checkoutPage.isBackToProductsDisplayed());
+        Assert.assertTrue(checkoutPage.isBackToProductsEnabled());
+        Assert.assertTrue(checkoutPage.isGeneratePdfOrderDisplayed());
+        Assert.assertTrue(checkoutPage.isGeneratePdfOrderEnabled());
+
+        // Back to products
+        checkoutPage.clickBackToProducts();
+
+        Assert.assertEquals(driver.getCurrentUrl(),
+                "https://www.saucedemo.com/inventory.html");
     }
 
     @Test(priority = 11)
-    public void verifyLoginPageAfterLogout() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    public void logoutSuccessful() {
+        // Open sidebar
+        homePage.openSideBar();
 
-        // Open hamburger menu
-        wait.until(ExpectedConditions.elementToBeClickable(
-                By.id("react-burger-menu-btn"))).click();
+        // Verify sidebar is displayed
+        Assert.assertTrue(homePage.isSidebarDisplayed(), "Sidebar menu is not displayed");
 
         // Click logout
-        wait.until(ExpectedConditions.elementToBeClickable(
-                By.id("logout_sidebar_link"))).click();
+        homePage.clickLogout();
 
-        // Verify login page
-        wait.until(ExpectedConditions.urlToBe("https://www.saucedemo.com/"));
+        // Verify redirected to login page
+        Assert.assertTrue(wait.until(ExpectedConditions.urlToBe("https://www.saucedemo.com/")), "Logout failed: URL is incorrect");
 
-        Assert.assertTrue(driver.findElement(By.id("user-name")).isDisplayed(),
-                "Username field is not displayed");
-
-        Assert.assertTrue(driver.findElement(By.id("password")).isDisplayed(),
-                "Password field is not displayed");
-
-        Assert.assertTrue(driver.findElement(By.id("login-button")).isDisplayed(),
-                "Login button is not displayed");
-
-        Assert.assertTrue(driver.findElement(By.id("login-button")).isEnabled(),
-                "Login button is not enabled");
+        // Verify login button
+        Assert.assertTrue(loginPage.isLoginButtonDisplayed(), "Login button is not displayed");
     }
 
     @Test(priority = 12)
-    public void verifyCannotAccessProductsAfterLogout() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-        // Open hamburger menu
-        wait.until(ExpectedConditions.elementToBeClickable(
-                By.id("react-burger-menu-btn"))).click();
+    public void verifyLoginPageAfterLogout() {
+        // Open sidebar
+        homePage.openSideBar();
 
         // Click logout
-        wait.until(ExpectedConditions.elementToBeClickable(
-                By.id("logout_sidebar_link"))).click();
+        homePage.clickLogout();
 
-        // Verify logout
-        wait.until(ExpectedConditions.urlToBe("https://www.saucedemo.com/"));
+        // Verify redirected to login page
+        Assert.assertTrue(wait.until(ExpectedConditions.urlToBe("https://www.saucedemo.com/")), "Logout failed: URL is incorrect");
 
-        // Click browser Back button
+        // Verify username field
+        Assert.assertTrue(loginPage.isUsernameDisplayed(), "Username field is not displayed");
+
+        // Verify password field
+        Assert.assertTrue(loginPage.isPasswordDisplayed(), "Password field is not displayed");
+
+        // Verify login button
+        Assert.assertTrue(loginPage.isLoginButtonDisplayed(), "Login button is not displayed");
+
+        // Verify login button enabled
+        Assert.assertTrue(loginPage.isLoginButtonEnabled(), "Login button is not enabled");
+    }
+
+    @Test(priority = 13)
+    public void verifyCannotAccessProductsAfterLogout() {
+        // Open sidebar
+        homePage.openSideBar();
+
+        // Logout
+        homePage.clickLogout();
+
+        // Verify redirected to login page
+        Assert.assertTrue(wait.until(ExpectedConditions.urlToBe("https://www.saucedemo.com/")), "Logout failed: URL is incorrect");
+
+        // Navigate back
         driver.navigate().back();
 
-        // Verify user remains on login page
-        Assert.assertTrue(wait.until(ExpectedConditions.urlToBe(
-                        "https://www.saucedemo.com/")),
-                "User can access Products page after logout");
+        // Verify user cannot access Products page
+        Assert.assertTrue(wait.until(ExpectedConditions.urlToBe("https://www.saucedemo.com/")), "User can access Products page after logout");
 
-        // Refresh browser
+        // Refresh page
         driver.navigate().refresh();
 
-        // Verify login page after refresh
-        wait.until(ExpectedConditions.urlToBe("https://www.saucedemo.com/"));
-
-        Assert.assertTrue(driver.findElement(By.id("login-button")).isDisplayed(),
-                "Login page is not displayed after refresh");
+        // Verify login page remains displayed
+        Assert.assertTrue(wait.until(ExpectedConditions.urlToBe("https://www.saucedemo.com/")), "User can access Products page after refresh");
+        Assert.assertTrue(loginPage.isLoginButtonDisplayed(), "Login page is not displayed after refresh");
     }
 
     @AfterMethod
