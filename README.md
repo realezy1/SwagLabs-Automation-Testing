@@ -6,6 +6,8 @@ This project is a Web UI Automation Testing project for the Swag Labs demo e-com
 
 The project was developed to automate functional testing of the main application features using Selenium WebDriver, Java, and TestNG.
 
+In addition to automation testing, Jira was used to organize and manage test cases, track testing activities, and document test execution results.
+
 The testing focuses on login functionality, product catalog, sidebar navigation, product sorting, shopping cart management, and checkout processes.
 
 **Application Under Test:** [Swag Labs](https://www.saucedemo.com/)
@@ -23,6 +25,8 @@ The objectives of this project are:
 - Verify adding and removing products from the shopping cart.
 - Validate checkout workflows for single-product and multiple-product transactions.
 - Verify order information and the order completion page.
+- Organize and document test cases using Jira.
+- Track test execution status and testing progress through Jira.
 
 ## 3. Tools and Technologies
 
@@ -33,10 +37,40 @@ The objectives of this project are:
 | TestNG | 7.12.0 | Test execution and assertions |
 | Maven | - | Project and dependency management |
 | IntelliJ IDEA | - | Integrated Development Environment |
+| Jira | - | Test case management and test execution tracking |
 | Google Chrome | - | Browser used for testing |
 | ChromeDriver | Compatible version | Browser automation driver |
 
-## 4. Test Scenarios
+## 4. Test Management Using Jira
+
+Jira was used to support test management activities throughout the testing process.
+
+The activities included:
+
+- Creating and organizing test cases for login, product catalog, sorting, cart, and checkout functionalities.
+- Documenting test steps and expected results.
+- Managing test case execution status.
+- Tracking testing progress and identifying test cases that required further validation.
+- Maintaining test documentation for testing activities.
+
+### Test Case Coverage
+
+The test cases were organized based on the application's main functional areas:
+
+| Test Module | Testing Scope |
+|---|---|
+| Login | Valid credentials, invalid credentials, and empty input validation |
+| Product Catalog | Product information and product availability |
+| Sidebar Navigation | Navigation to additional catalog pages |
+| Product Sorting | Sorting options and selected values |
+| Shopping Cart | Add, remove, and cart validation |
+| Checkout | Single-product and multiple-product checkout workflows |
+
+**Jira Project:** [Insert Jira Project Link]
+
+**Jira Evidence:** Add screenshots of the Jira project, test cases, and execution results.
+
+## 5. Test Scenarios
 
 This project contains 15 TestNG test methods organized into two test classes.
 
@@ -65,7 +99,7 @@ This project contains 15 TestNG test methods organized into two test classes.
 | 10 | shoppingOneProduct | Complete checkout with one product | Product information, checkout details, order summary, and completion page display expected values. |
 | 11 | shoppingMultipleProduct | Complete checkout with multiple products | Cart quantity, product information, product removal, subtotal, and order completion are validated. |
 
-## 5. Test Execution Instructions
+## 6. Test Execution Instructions
 
 ### Prerequisites
 
@@ -82,7 +116,7 @@ Make sure the following tools are installed:
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/YOUR-USERNAME/SwagLabs-Automation-Testing.git
+   git clone https://github.com/realezy1/SwagLabs-Automation-Testing.git
    ```
 
 2. Open the project in IntelliJ IDEA.
@@ -114,7 +148,7 @@ Make sure the following tools are installed:
    mvn test
    ```
 
-## 6. Test Results
+## 7. Test Results
 
 The test scripts use TestNG assertions, including `Assert.assertEquals()` and `Assert.assertTrue()`, to validate actual application behavior against expected results.
 
@@ -130,7 +164,13 @@ The test scripts use TestNG assertions, including `Assert.assertEquals()` and `A
 
 All 15 test methods passed based on the reported TestNG execution results.
 
-## 7. Project Structure
+### Test Execution Management
+
+Jira was used to document and monitor manual test case execution and testing progress.
+
+The automation execution results were obtained from TestNG reports.
+
+## 8. Project Structure
 
 ```text
 SwagLabs-Automation-Testing/
@@ -146,22 +186,51 @@ SwagLabs-Automation-Testing/
 ├── .gitignore
 └── README.md
 ```
+
+## 9. Screenshots and Testing Evidence
+
+The following screenshots provide evidence of the automation testing activities and execution results.
+
+### A. Automation Test Execution
+
+**LoginPageTest.java**
+
+<img width="1911" height="1077" alt="LoginPageTest execution result" src="https://github.com/user-attachments/assets/d93a89c4-edfc-43fd-894d-92d79b68b9cf" />
+
+**HomePageTest.java**
+
+<img width="1917" height="1077" alt="HomePageTest execution result" src="https://github.com/user-attachments/assets/cc6e35e5-b2ff-46bf-acd6-f35a0dd273af" />
+
+### B. Jira Test Management Evidence
+
+<img width="1917" height="968" alt="image" src="https://github.com/user-attachments/assets/a0cbf5b5-0867-4b4c-a383-a050b9067bd3" />
+- Jira project overview or board.
+- Created test cases and their test steps.
+- Test execution status and results.
+- Testing progress and documentation.
+
+## 10. Project Information
+
+| Category | Details |
+|---|---|
+| Project Type | Web UI Automation Testing |
+| Application Under Test | Swag Labs |
+| Testing Approach | Functional Testing |
+| Automation Tool | Selenium WebDriver |
+| Programming Language | Java |
+| Test Framework | TestNG |
+| Test Management Tool | Jira |
+| Build Tool | Maven |
+| Browser | Google Chrome |
+| Total Automated Test Methods | 15 |
+| Overall Pass Rate | 100% |
+
+## 11. Repository
+
+**GitHub Repository:** [SwagLabs-Automation-Testing](https://github.com/realezy1/SwagLabs-Automation-Testing)
+
+**Application Under Test:** [Swag Labs](https://www.saucedemo.com/)
+
 ---
 
-## Project Information
-
-- **Project Type:** Web UI Automation Testing
-- **Application Under Test:** Swag Labs
-- **Testing Approach:** Functional Testing
-- **Automation Tool:** Selenium WebDriver
-- **Programming Language:** Java
-- **Test Framework:** TestNG
-- **Build Tool:** Maven
-
-## 8. Screenshots Test Result
-- LoginPageTest.Java
-<img width="1911" height="1077" alt="image" src="https://github.com/user-attachments/assets/d93a89c4-edfc-43fd-894d-92d79b68b9cf" />
-
-- HomePageTest.Java
-<img width="1917" height="1077" alt="Screenshot 2026-11-04 015720" src="https://github.com/user-attachments/assets/cc6e35e5-b2ff-46bf-acd6-f35a0dd273af" />
-
+*This project was developed as a personal learning project to practice software testing, web UI automation, test management, and quality assurance practices.*
